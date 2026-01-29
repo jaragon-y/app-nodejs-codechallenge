@@ -5,11 +5,11 @@ WORKDIR /app
 COPY pom.xml .
 RUN mvn dependency:go-offline
 
-# Copiamos el cÃ³digo fuente y generamos el archivo JAR
+# Copiamos el código fuente y generamos el archivo JAR
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# Etapa 2: Run (EjecuciÃ³n)
+# Etapa 2: Run (Ejecución)
 # Usamos una imagen ligera de JRE 21 para correr la app
 FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
@@ -17,5 +17,8 @@ WORKDIR /app
 # Copiamos el JAR generado en la etapa anterior
 COPY --from=build /app/target/*.jar app.jar
 
-# Ejecutamos la aplicaciÃ³n
+# Exponemos el puerto del microservicio
+EXPOSE 8081
+
+# Ejecutamos la aplicación
 ENTRYPOINT ["java", "-jar", "app.jar"]
